@@ -1,23 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import axios from 'axios';
 
+import { auth } from '../utils/firebase';
 import { AuthContextProvider } from '../utils/context/authContext';
 import BaseLayout from '../layouts/BaseLayout';
 
 export default function App({ Component, pageProps }) {
-  const [logged, setLogged] = useState(false);
-  const [profile, setProfile] = useState({
-    username: 'akhil',
-    email: 'akhil@hasura.io',
-  });
+  const [loggedInUser, setLoggedInUser] = useState();
+
+  axios.defaults.headers.common['Authorization'] = loggedInUser?.accessToken;
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log('triggered', currentUser?.email);
+      // window.localStorage.setItem('accessToken', currentUser?.accessToken);
+      setLoggedInUser(currentUser);
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <AuthContextProvider
       value={{
-        logged,
-        setLogged,
-        profile,
-        setProfile,
-        token: 'this-is-jwt-token',
+        loggedInUser,
+        setLoggedInUser,
       }}
     >
       <BaseLayout>

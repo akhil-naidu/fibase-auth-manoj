@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { register } from '../utils/authFunctions';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const submitHandler = (e) => {
+  const router = useRouter();
+
+  const submitHandler = async (e) => {
     e.preventDefault();
 
-    console.log(username, email, password);
+    register(email, password);
+    router.push('/');
   };
 
   return (

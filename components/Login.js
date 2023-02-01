@@ -1,23 +1,24 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { useAuthContext } from '../utils/context/authContext';
 import { useRouter } from 'next/router';
+import { login } from '../utils/authFunctions';
+
+import { useAuthContext } from '../utils/context/authContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // const router = useRouter();
+  const router = useRouter();
 
-  const { setLogged, setProfile } = useAuthContext();
+  // const { setLogged, setProfile } = useAuthContext();
 
   const submitHandler = (e) => {
     e.preventDefault();
 
-    console.log(email, password);
-    setLogged(true);
-    setProfile((prev) => ({ ...prev, email }));
-    // router.push('/');
+    login(email, password);
+
+    router.push('/');
   };
 
   return (

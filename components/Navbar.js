@@ -1,18 +1,19 @@
 import React from 'react';
 import Link from 'next/link';
 import { useAuthContext } from '../utils/context/authContext';
+import { logout } from '../utils/authFunctions';
 
 const Navbar = () => {
-  const { logged, setLogged } = useAuthContext();
+  const { loggedInUser } = useAuthContext();
 
   const handleLogout = () => {
-    setLogged(false);
+    logout();
   };
 
   return (
     <nav>
       <Link href='/'>Home</Link>
-      {logged ? (
+      {loggedInUser ? (
         <button onClick={() => handleLogout()}>logout</button>
       ) : (
         <>
